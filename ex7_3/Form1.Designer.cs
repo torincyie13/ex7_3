@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPubs));
             this.dlgPreview = new System.Windows.Forms.PrintPreviewDialog();
+            this.dlgPrint = new System.Windows.Forms.PrintDialog();
             this.SuspendLayout();
             // 
             // dlgPreview
@@ -41,6 +42,12 @@
             this.dlgPreview.Icon = ((System.Drawing.Icon)(resources.GetObject("dlgPreview.Icon")));
             this.dlgPreview.Name = "dlgPreview";
             this.dlgPreview.Visible = false;
+            // 
+            // dlgPrint
+            // 
+            this.dlgPrint.AllowSomePages = true;
+            this.dlgPrint.ShowHelp = true;
+            this.dlgPrint.UseEXDialog = true;
             // 
             // frmPubs
             // 
@@ -60,6 +67,7 @@
         #endregion
 
         private System.Windows.Forms.PrintPreviewDialog dlgPreview;
+        private System.Windows.Forms.PrintDialog dlgPrint;
     }
 }
 

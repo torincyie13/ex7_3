@@ -109,8 +109,16 @@ namespace ex7_3
             publishersDocument.PrintPage += new PrintPageEventHandler(this.PrintPublishersPage);
             // print document
             pageNumber = 1;
-            dlgPreview.Document = publishersDocument;
-            dlgPreview.ShowDialog();
+            // dlgPreview.Document = publishersDocument;
+            // dlgPreview.ShowDialog();
+            dlgPrint.Document = publishersDocument;
+            dlgPrint.ShowDialog();
+
+            DialogResult result = dlgPrint.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                publishersDocument.Print();
+            }
             // dispose of object when done printing
             publishersDocument.Dispose();
         }
@@ -120,7 +128,56 @@ namespace ex7_3
             // print headings
             Font myFont = new Font("Arial", 18, FontStyle.Bold);
             int y = Convert.ToInt32(e.MarginBounds.Top);
-           
+            e.Graphics.DrawString("Book Publishers Listing - " +
+                DateTime.Now.ToString(), myFont, Brushes.Black,
+                e.MarginBounds.Left, y);
+            y += Convert.ToInt32(myFont.GetHeight());
+            e.Graphics.DrawString("Page " + pageNumber.ToString(),
+                myFont, Brushes.Black, e.MarginBounds.Left, y);
+            y += Convert.ToInt32(myFont.GetHeight()) + 10;
+            e.Graphics.DrawLine(Pens.Black, e.MarginBounds.Left, y,
+                e.MarginBounds.Right, y);
+            y += Convert.ToInt32(myFont.GetHeight());
+            myFont = new Font("Courier new", 12, FontStyle.Regular);
+            int iEnd = recordsPerPage * pageNumber;
+            if (iEnd > publishersTable.Rows.Count)
+            {
+                iEnd = publishersTable.Rows.Count;
+                e.HasMorePages = false;
+            }
+            else
+            {
+                e.HasMorePages = true;
+            }
+            for (int i = recordsPerPage * (pageNumber - 1); i < iEnd; i++)
+            {
+                // display current record
+                e.Graphics.DrawString("Publisher: " +
+                    publishersTable.Rows[i]["Name"].ToString(), myFont,
+                    Brushes.Black, e.MarginBounds.Left, y);
+                y += Convert.ToInt32(myFont.GetHeight());
+                e.Graphics.DrawString("Address:   " +
+                    publishersTable.Rows[i]["Address"].ToString(), myFont,
+                    Brushes.Black, e.MarginBounds.Left, y);
+                y += Convert.ToInt32(myFont.GetHeight());
+                e.Graphics.DrawString("City:   " +
+                    publishersTable.Rows[i]["City"].ToString(), myFont,
+                    Brushes.Black, e.MarginBounds.Left, y);
+                y += Convert.ToInt32(myFont.GetHeight());
+                e.Graphics.DrawString("State:  " +
+                    publishersTable.Rows[i]["State"].ToString(), myFont,
+                    Brushes.Black, e.MarginBounds.Left, y);
+                y += Convert.ToInt32(myFont.GetHeight());
+                e.Graphics.DrawString("Zip:   " +
+                    publishersTable.Rows[i]["Zip"].ToString(), myFont,
+                    Brushes.Black, e.MarginBounds.Left, y);
+                y += Convert.ToInt32(myFont.GetHeight());
+                y += 2 * Convert.ToInt32(myFont.GetHeight());
+            }
+            if (e.HasMorePages)
+                pageNumber++;
+            else
+                pageNumber = 1;
         }
     }
 }
